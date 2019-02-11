@@ -1,0 +1,30 @@
+@font-face {
+    font-family: PerfectDOS;
+    src: url('../Perfect DOS VGA 437.ttf');
+}
+
+body {
+    background-image: url('../images/monitor.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: black;
+    
+}
+
+
+
+.mainContent {
+    padding: 15%;
+    font-family: PerfectDOS;
+    font-size: 180%;
+}
+
+h1 {
+    font-size: 250%;
+    text-align: center;
+}
+
+h2 {
+    text-align: center;
+}
+

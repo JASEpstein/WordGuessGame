@@ -20,24 +20,53 @@ function genCharArray(charA, charZ) {
         alphabetArray.push(String.fromCharCode(i));
     }
     alphabetArray.push(' ');
-    
     return alphabetArray;
 }
 genCharArray('a', 'z');
 
 //Movie Database Object
-var movieDatabase = {
-    TotalRecall: ["url('https://goo.gl/images/2uzU31')", "Total Recall"],
-    SayAnything: ["url('https://goo.gl/images/mgv9uf')", "Say Anything"],
-    BackToTheFuture: ["url('https://goo.gl/images/x1zGar')", "Back To The Future"],
-    Highlander: ["url('https://goo.gl/images/w7WxZc')", "Highlander"],
-    TopGun: ["url('https://goo.gl/images/hBgf4J')", "Top Gun"],
-    Poltergeist: ["url('https://goo.gl/images/qBfzox')", "Poltergeist"],
-    TheShining: ["url('https://goo.gl/images/t4xNrR')", "The Shining"],
-    TheGoonies: ["url('https://goo.gl/images/MDH2ci')", "The Goonies"],
-    Ghostbusters: ["url('https://goo.gl/images/Zhnstg')", "Ghostbusters"],
-    TheTerminator: ["url('https://goo.gl/images/75zPwD')", "The Terminator"]
-};
+var movieDatabase = [
+    TotalRecall = {
+        name: "Total Recall",
+        url: "url('https://goo.gl/images/2uzU31')"
+    },
+    SayAnything = {
+        name: "Say Anything",
+        url: "url('https://goo.gl/images/mgv9uf')"
+    },
+    BackToTheFuture = {
+        name: "Back To The Future",
+        url: "url('https://goo.gl/images/x1zGar')"
+    },
+    Highlander = {
+        name: "Highlander",
+        url: "url('https://goo.gl/images/w7WxZc')"
+    },
+    TopGun = {
+        name: "Top Gun", 
+        url: "url('https://goo.gl/images/hBgf4J')"
+    },
+    Poltergeist = {
+        name: "Poltergeist", 
+        url: "url('https://goo.gl/images/qBfzox')"
+    },
+    TheShining = {
+        name: "The Shining",
+        url: "url('https://goo.gl/images/t4xNrR')"
+    },
+    TheGoonies = {
+        name: "The Goonies", 
+        url: "url('https://goo.gl/images/MDH2ci')"
+    },
+    Ghostbusters = {
+        name: "Ghostbusters",
+        url: "url('https://goo.gl/images/Zhnstg')"
+    },
+    TheTerminator = {
+        name: "The Terminator",
+        url: "url('https://goo.gl/images/75zPwD')"
+    },
+];
 
 //Resets the game
 function roundReset() {
@@ -47,16 +76,13 @@ function roundReset() {
 }
 
 function setUpWordToGuess() {
-    var tmpList = Object.keys(movieDatabase);
-    var randomProperty = tmpList[Math.floor(Math.random() * tmpList.length)];
-    //Sets randomMovie equal to an array
-    randomMovie = movieDatabase[randomProperty];
-    //Returns string of name of random movie
-    randomMovie.find(function (){
-        wordToGuess = [1]; 
-    });
-    console.log(wordToGuess);
+    var randomArrayItem = movieDatabase[Math.floor(Math.random() * movieDatabase.length)];
+    wordToGuess = randomArrayItem.name;
 };
+
+function setUpGuessBlocks() {
+
+}
 
 //Startup on 'Press Any Key'
 document.onkeyup = function(start){
@@ -70,29 +96,29 @@ document.onkeyup = function(start){
 
 
 //Keyups for Guessing
-// document.onkeyup = function (e) {
-//     keyMatch = alphabetArray.find(function (letterMatch) {
-//         return letterMatch === e.key;
-//     });
-//     //Win Criteria
-//     if (startUp === true){
-//         if (keyMatch === randomLetter) {
-//             document.getElementById("wins").textContent = ++winsCount;
-//             roundReset();
-//             //Exclude keys that aren't the alphabet
-//         } else if (keyMatch === undefined) {
-//             return;
-//             //Loss Criteria
-//         } else {
-//             guessesSoFar.push(keyMatch);
-//             document.getElementById("guessesLeft").textContent = 10 - guessesSoFar.length;
-//             document.getElementById("guessesSoFar").textContent = guessesSoFar;
-//         }
-//         //Loss Counter to Reset after too many guesses
-//         if (guessesSoFar.length === 10) {
-//             document.getElementById("losses").textContent = ++lossesCount;
-//             roundReset();
-//         }
-//     }
+document.onkeyup = function (e) {
+    keyMatch = alphabetArray.find(function (letterMatch) {
+        return letterMatch === e.key;
+    });
+    //Win Criteria
+    if (startUp === true){
+        if (keyMatch === randomLetter) {
+            document.getElementById("wins").textContent = ++winsCount;
+            roundReset();
+            //Exclude keys that aren't the alphabet
+        } else if (keyMatch === undefined) {
+            return;
+            //Loss Criteria
+        } else {
+            guessesSoFar.push(keyMatch);
+            document.getElementById("guessesLeft").textContent = 10 - guessesSoFar.length;
+            document.getElementById("guessesSoFar").textContent = guessesSoFar;
+        }
+        //Loss Counter to Reset after too many guesses
+        if (guessesSoFar.length === 10) {
+            document.getElementById("losses").textContent = ++lossesCount;
+            roundReset();
+        }
+    }
        
-//    };
+   };
