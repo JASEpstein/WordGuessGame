@@ -69,6 +69,27 @@ var movies = [
     {
         name: "the terminator",
         url: "url('https://goo.gl/images/75zPwD')"
+    },
+    {
+        name: "the running man"
+    },
+    {
+        name: "sixteen candles"
+    },
+    {
+        name: "ferris buellers day off"
+    },
+    {
+        name: "red dawn"
+    },
+    {
+        name: "dirty dancing"
+    },
+    {
+        name: "footloose"
+    },
+    {
+        name: "raiders of the lost ark"
     }
 ];
 
@@ -166,7 +187,6 @@ function winCondition() {
     updateWins();
     roundReset();
 }
-// makeAGuess();
 
 function roundStart(){
     //1st Pick a random movie from array
