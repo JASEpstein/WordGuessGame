@@ -80,7 +80,7 @@ function genCharArray(charA, charZ) {
     for (; i <= j; ++i) {
         alphabetArray.push(String.fromCharCode(i));
     }
-    alphabetArray.push(' ');
+    // alphabetArray.push(' ');
     return alphabetArray;
 }
 genCharArray('a', 'z');
@@ -156,12 +156,17 @@ function makeAGuess(guessLetter){
     
     //Win Condition
     if(hashString === wordToGuess){
-        alert('You won!');
-        updateWins();
-        roundReset();
+        setTimeout(winCondition(), 8000);
     }
    
 }
+
+function winCondition() {
+    alert('You won!');
+    updateWins();
+    roundReset();
+}
+// makeAGuess();
 
 function roundStart(){
     //1st Pick a random movie from array
@@ -187,6 +192,7 @@ document.onkeyup = function(e){
     if (startUp === true){
         //Checks if game is started, proceeds to execute the game
         makeAGuess(e.key);
+        makeAGuess(e.keyCode == 32);
     } else {
         //Allows the game to start on next key press
         startUp = true;
