@@ -12,11 +12,13 @@ body {
     
 }
 
-
-
 .mainContent {
     padding: 15%;
     font-family: PerfectDOS;
 }
 
+#hashString,
+#lettersGuessed {
+    text-transform: uppercase;
+}
 

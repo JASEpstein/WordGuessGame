@@ -10,86 +10,157 @@ PSEUDOCODE
 7.) When the number of mistakes reaches 0, the game resets.
 
 */
+
+// POTENTIAL FOR DIFFERENT DIFFICULTY LEVELS (CHANGE MISTAKES ALLOWED, RESTRUCTURE DATA INTO EASY/MED/HARD)
+// PROMPT COULD BE WRITTEN TO ASK FOR DIFFICULTY LEVEL ON LOAD
+
 // Global Variables
 
 var winsCount = 0;
 var lossesCount = 0;
 var guessesSoFar = [];
-var guessesLeftCount = 10 - guessesSoFar.length;
+var mistakesCount = 8;
 var wordToGuess = '';
 var startUp = false;
 var randomMovie = '';
-var wordHash = '';
-var movie = '';
+var hashString = '';
+var movieArr = '';
+var hashArr = '';
+var lettersGuessed = [];
+var alphabetArray = [];
 
 //Movie Array
 var movies = [
     {
-        name: "Total Recall",
+        name: "total recall",
         url: "url('https://goo.gl/images/2uzU31')"
     },
     {
-        name: "Say Anything",
+        name: "say anything",
         url: "url('https://goo.gl/images/mgv9uf')"
     },
     {
-        name: "Back To The Future",
+        name: "back to the future",
         url: "url('https://goo.gl/images/x1zGar')"
     },
     {
-        name: "Highlander",
+        name: "highlander",
         url: "url('https://goo.gl/images/w7WxZc')"
     },
     {
-        name: "Top Gun", 
+        name: "top gun", 
         url: "url('https://goo.gl/images/hBgf4J')"
     },
     {
-        name: "Poltergeist", 
+        name: "poltergeist", 
         url: "url('https://goo.gl/images/qBfzox')"
     },
     {
-        name: "The Shining",
+        name: "the shining",
         url: "url('https://goo.gl/images/t4xNrR')"
     },
     {
-        name: "The Goonies", 
+        name: "the goonies", 
         url: "url('https://goo.gl/images/MDH2ci')"
     },{
-        name: "Ghostbusters",
+        name: "ghostbusters",
         url: "url('https://goo.gl/images/Zhnstg')"
     },
     {
-        name: "The Terminator",
+        name: "the terminator",
         url: "url('https://goo.gl/images/75zPwD')"
     }
 ];
 
+//Purpose: to use to exclude special characterse
+function genCharArray(charA, charZ) {
+    alphabetArray = [],
+        i = charA.charCodeAt(0),
+        j = charZ.charCodeAt(0);
+    for (; i <= j; ++i) {
+        alphabetArray.push(String.fromCharCode(i));
+    }
+    alphabetArray.push(' ');
+    return alphabetArray;
+}
+genCharArray('a', 'z');
 
 function updateHash() {
-    document.getElementById("wordHash").textContent = wordHash;
+    document.getElementById("hashString").textContent = hashString;
 }
+
+function updateLettersGuessed(){
+    document.getElementById("lettersGuessed").textContent = lettersGuessed;
+}
+
+function updateMistakes() {
+    --mistakesCount;
+    document.getElementById("mistakes").textContent = mistakesCount;
+}
+
+function updateWins(){
+    ++winsCount;
+    document.getElementById("wins").textContent = winsCount;
+}
+
 //Resets the game
 function roundReset() {
-  
+    mistakesCount = 8;
+    hashString = '';
+    document.getElementById("hashString").textContent = hashString;
+    lettersGuessed = [];
+    updateLettersGuessed();
+    roundStart();
+    makeAGuess();
 }
 
 function makeAGuess(guessLetter){
-    //Set an empty array called letterPositions[]
-    movie = wordToGuess.split('');
-    hash = wordHash.split('');
-    //Look through wordToGuess for instances of guessLetter
-    movie.forEach(function (character, index) {
+    //Creates two arrays, one blank & one with the word, and slowly changes one to the other
+    movieArr = wordToGuess.split('');
+    hashArr = hashString.split('');
+
+    movieArr.forEach(function (character, index) {
         if (character === guessLetter){
-            hash[index] = guessLetter;
-        }
+            hashArr[index] = guessLetter;
+        } 
     });
-    //If one or more instances of guessLetter exist in wordToGuess, record position in letterPositions[]
-    //For each letter position in letterPositions[], replace the corresponding hash in wordHash with guessLetter 
-    //If no instances of guessLetter exist in wordToGuess, iterate the Mistakes counter
-    //If fail condition is met, call roundReset()
-    wordHash = hash.join("");
+    //Converts hashString back into a string
+    hashString = hashArr.join("");
     updateHash();
+
+    //Letters Guessed tracker
+    updateLettersGuessed();
+
+    //LOGIC SECTION - Tracks guessed letters, excludes letters already guessed & special characters
+    //If guessed letter is not in the hash array...
+    if(hashArr.includes(guessLetter) === false){
+        //If guessed letter has already been stored in guess tracker array...
+        if (lettersGuessed.includes(guessLetter)){
+            return;
+        } else {
+            if (alphabetArray.includes(guessLetter) === false) {
+                return;
+            } else {
+                updateMistakes();
+                lettersGuessed.push(guessLetter);
+                updateLettersGuessed();
+            }
+        }
+    }    
+
+    //Lose Condition
+    if(mistakesCount === 0){
+        alert("Try again!");
+        roundReset();
+    }
+    
+    //Win Condition
+    if(hashString === wordToGuess){
+        alert('You won!');
+        updateWins();
+        roundReset();
+    }
+   
 }
 
 function roundStart(){
@@ -98,10 +169,13 @@ function roundStart(){
     wordToGuess = randomArrayItem.name;
     //2nd Create identical length string of hashes
     for (i = 0; i < wordToGuess.length; i++) {
-        wordHash += "#";
+        hashString += "#";
     }
-    //Initial display wordHash in the browser
+    //Initial display hashString in the browser
     updateHash();
+
+    //Display Mistakes Remaining
+    document.getElementById("mistakes").textContent = mistakesCount;
 
     //Update User instructions
     document.getElementById('instructions').textContent = 'Start Guessing Letters!';
@@ -117,5 +191,6 @@ document.onkeyup = function(e){
         //Allows the game to start on next key press
         startUp = true;
         roundStart();
-    }
+    } 
 };
+
