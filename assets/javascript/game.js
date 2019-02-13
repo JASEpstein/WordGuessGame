@@ -177,7 +177,7 @@ function makeAGuess(guessLetter){
     
     //Win Condition
     if(hashString === wordToGuess){
-        setTimeout(winCondition(), 8000);
+        setTimeout(winCondition, 500);
     }
    
 }
