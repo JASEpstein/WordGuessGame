@@ -29,9 +29,8 @@ var hashArr = '';
 var lettersGuessed = [];
 var alphabetArray = [];
 
-//Movie Array
-var movies = [
-    {
+//Master Movie Array
+var movies = [{
         name: "total recall",
         url: "url('https://goo.gl/images/2uzU31')"
     },
@@ -48,11 +47,11 @@ var movies = [
         url: "url('https://goo.gl/images/w7WxZc')"
     },
     {
-        name: "top gun", 
+        name: "top gun",
         url: "url('https://goo.gl/images/hBgf4J')"
     },
     {
-        name: "poltergeist", 
+        name: "poltergeist",
         url: "url('https://goo.gl/images/qBfzox')"
     },
     {
@@ -60,9 +59,9 @@ var movies = [
         url: "url('https://goo.gl/images/t4xNrR')"
     },
     {
-        name: "the goonies", 
+        name: "the goonies",
         url: "url('https://goo.gl/images/MDH2ci')"
-    },{
+    }, {
         name: "ghostbusters",
         url: "url('https://goo.gl/images/Zhnstg')"
     },
@@ -93,6 +92,9 @@ var movies = [
     }
 ];
 
+
+// HELPER FUNCTIONS
+
 //Purpose: to use to exclude special characterse
 function genCharArray(charA, charZ) {
     alphabetArray = [],
@@ -101,16 +103,17 @@ function genCharArray(charA, charZ) {
     for (; i <= j; ++i) {
         alphabetArray.push(String.fromCharCode(i));
     }
-    // alphabetArray.push(' ');
+    alphabetArray.push(' ');
     return alphabetArray;
 }
 genCharArray('a', 'z');
 
+//DOM Updates
 function updateHash() {
     document.getElementById("hashString").textContent = hashString;
 }
 
-function updateLettersGuessed(){
+function updateLettersGuessed() {
     document.getElementById("lettersGuessed").textContent = lettersGuessed;
 }
 
@@ -119,67 +122,9 @@ function updateMistakes() {
     document.getElementById("mistakes").textContent = mistakesCount;
 }
 
-function updateWins(){
+function updateWins() {
     ++winsCount;
     document.getElementById("wins").textContent = winsCount;
-}
-
-//Resets the game
-function roundReset() {
-    mistakesCount = 8;
-    hashString = '';
-    document.getElementById("hashString").textContent = hashString;
-    lettersGuessed = [];
-    updateLettersGuessed();
-    roundStart();
-    makeAGuess();
-}
-
-function makeAGuess(guessLetter){
-    //Creates two arrays, one blank & one with the word, and slowly changes one to the other
-    movieArr = wordToGuess.split('');
-    hashArr = hashString.split('');
-
-    movieArr.forEach(function (character, index) {
-        if (character === guessLetter){
-            hashArr[index] = guessLetter;
-        } 
-    });
-    //Converts hashString back into a string
-    hashString = hashArr.join("");
-    updateHash();
-
-    //Letters Guessed tracker
-    updateLettersGuessed();
-
-    //LOGIC SECTION - Tracks guessed letters, excludes letters already guessed & special characters
-    //If guessed letter is not in the hash array...
-    if(hashArr.includes(guessLetter) === false){
-        //If guessed letter has already been stored in guess tracker array...
-        if (lettersGuessed.includes(guessLetter)){
-            return;
-        } else {
-            if (alphabetArray.includes(guessLetter) === false) {
-                return;
-            } else {
-                updateMistakes();
-                lettersGuessed.push(guessLetter);
-                updateLettersGuessed();
-            }
-        }
-    }    
-
-    //Lose Condition
-    if(mistakesCount === 0){
-        alert("Try again!");
-        roundReset();
-    }
-    
-    //Win Condition
-    if(hashString === wordToGuess){
-        setTimeout(winCondition, 500);
-    }
-   
 }
 
 function winCondition() {
@@ -188,7 +133,10 @@ function winCondition() {
     roundReset();
 }
 
-function roundStart(){
+//GAME FUNCTIONS
+
+//Starts the game
+function roundStart() {
     //1st Pick a random movie from array
     var randomArrayItem = movies[Math.floor(Math.random() * movies.length)];
     wordToGuess = randomArrayItem.name;
@@ -204,19 +152,81 @@ function roundStart(){
 
     //Update User instructions
     document.getElementById('instructions').textContent = 'Start Guessing Letters!';
+
+    //Passes in a Space to auto-populate the spaces between words
+    makeAGuess(" ");
 }
 
+//Main Game Logic
+function makeAGuess(guessLetter) {
+    //Creates two arrays, one blank & one with the word, and slowly changes one to the other
+    movieArr = wordToGuess.split('');
+    hashArr = hashString.split('');
+
+    movieArr.forEach(function (character, index) {
+        if (character === guessLetter) {
+            hashArr[index] = guessLetter;
+        }
+    });
+    //Converts hashArr back into a string
+    hashString = hashArr.join("");
+    updateHash();
+
+    //Letters Guessed tracker
+    updateLettersGuessed();
+
+    //LOGIC SECTION - Tracks guessed letters, excludes letters already guessed & special characters
+    //If guessed letter is not in the hash array...
+    if (hashArr.includes(guessLetter) === false) {
+        //If guessed letter has already been stored in guess tracker array...
+        if (lettersGuessed.includes(guessLetter)) {
+            return;
+        } else {
+            if (alphabetArray.includes(guessLetter) === false) {
+                return;
+            } else {
+                updateMistakes();
+                if (guessLetter != " ") {
+                    lettersGuessed.push(guessLetter);
+                }
+                updateLettersGuessed();
+            }
+        }
+    }
+
+    //Lose Condition
+    if (mistakesCount === 0) {
+        alert("Try again!");
+        roundReset();
+    }
+
+    //Win Condition
+    if (hashString === wordToGuess) {
+        setTimeout(winCondition, 500);
+    }
+}
+
+//Resets the game
+function roundReset() {
+    mistakesCount = 8;
+    hashString = '';
+    document.getElementById("hashString").textContent = hashString;
+    lettersGuessed = [];
+    updateLettersGuessed();
+    roundStart();
+}
+
+//EVENT TO START GAME
 
 //Startup on 'Press Any Key'
-document.onkeyup = function(e){
-    if (startUp === true){
+document.onkeyup = function (e) {
+    if (startUp === true) {
         //Checks if game is started, proceeds to execute the game
         makeAGuess(e.key);
-        makeAGuess(e.keyCode == 32);
+        makeAGuess(" ");
     } else {
         //Allows the game to start on next key press
         startUp = true;
         roundStart();
-    } 
+    }
 };
-
