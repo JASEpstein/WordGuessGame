@@ -222,8 +222,8 @@ function roundReset() {
 document.onkeyup = function (e) {
     if (startUp === true) {
         //Checks if game is started, proceeds to execute the game
-        makeAGuess(e.key);
-        makeAGuess(" ");
+        makeAGuess(e.key, ' ');
+        // makeAGuess(" ");
     } else {
         //Allows the game to start on next key press
         startUp = true;
