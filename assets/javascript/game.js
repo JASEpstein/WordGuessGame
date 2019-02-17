@@ -101,6 +101,24 @@ var movies = [{
     },
     {
         name: "tron"
+    },
+    {
+        name: "the empire strikes back"
+    },
+    {
+        name: "close encounters of the third kind"
+    },
+    {
+        name: "gremlins"
+    },
+    {
+        name: "cloak and dagger"
+    },
+    {
+        name: "war games"
+    },
+    {
+        name: "weird science"
     }
 ];
 
