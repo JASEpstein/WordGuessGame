@@ -9,7 +9,7 @@ body {
     background-size: cover;
     background-color: black;
     font-size: 180%;
-    
+
 }
 
 .mainContent {
@@ -22,3 +22,6 @@ body {
     text-transform: uppercase;
 }
 
+.ascii {
+    border: 80px;
+}

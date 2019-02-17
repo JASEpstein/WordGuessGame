@@ -28,6 +28,9 @@ var movieArr = '';
 var hashArr = '';
 var lettersGuessed = [];
 var alphabetArray = [];
+var randomArrayItem = '';
+var index = '';
+var backMuz;
 
 //Master Movie Array
 var movies = [{
@@ -89,6 +92,15 @@ var movies = [{
     },
     {
         name: "raiders of the lost ark"
+    },
+    {
+        name: "the breakfast club"
+    },
+    {
+        name: "point break"
+    },
+    {
+        name: "tron"
     }
 ];
 
@@ -107,6 +119,33 @@ function genCharArray(charA, charZ) {
     return alphabetArray;
 }
 genCharArray('a', 'z');
+
+function pickRandomWord() {
+    index = Math.floor(Math.random() * movies.length);
+    randomArrayItem = movies[index];
+}
+
+function playBackgroundMusic() {
+    backMuz = document.getElementById("backgroundMusic");
+    backMuz.volume = 0.1;
+    backMuz.play();
+}
+
+function playKeySound() {
+    document.getElementById("keySound");
+    keySound.play();
+}
+
+function playSuccess() {
+    document.getElementById("successSound");
+    successSound.volume = 0.5;
+    successSound.play();
+}
+
+function playFail() {
+    document.getElementById("failSound");
+    failSound.play();
+}
 
 //DOM Updates
 function updateHash() {
@@ -128,8 +167,10 @@ function updateWins() {
 }
 
 function winCondition() {
+    playSuccess();
     alert('You won!');
     updateWins();
+    movies.splice(index, 1);
     roundReset();
 }
 
@@ -137,8 +178,9 @@ function winCondition() {
 
 //Starts the game
 function roundStart() {
+    backMuz.pause();
     //1st Pick a random movie from array
-    var randomArrayItem = movies[Math.floor(Math.random() * movies.length)];
+    pickRandomWord();
     wordToGuess = randomArrayItem.name;
     //2nd Create identical length string of hashes
     for (i = 0; i < wordToGuess.length; i++) {
@@ -196,6 +238,7 @@ function makeAGuess(guessLetter) {
 
     //Lose Condition
     if (mistakesCount === 0) {
+        playFail();
         alert("Try again!");
         roundReset();
     }
@@ -203,6 +246,13 @@ function makeAGuess(guessLetter) {
     //Win Condition
     if (hashString === wordToGuess) {
         setTimeout(winCondition, 500);
+    }
+
+    //END OF LINE
+    if (movies.length === 0) {
+        playBackgroundMusic();
+        alert("You guessed all the movies! Congratulations!!");
+        location.reload();
     }
 }
 
@@ -218,12 +268,14 @@ function roundReset() {
 
 //EVENT TO START GAME
 
+playBackgroundMusic();
+
 //Startup on 'Press Any Key'
 document.onkeyup = function (e) {
     if (startUp === true) {
         //Checks if game is started, proceeds to execute the game
         makeAGuess(e.key, ' ');
-        // makeAGuess(" ");
+        playKeySound();
     } else {
         //Allows the game to start on next key press
         startUp = true;
